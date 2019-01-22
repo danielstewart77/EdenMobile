@@ -1,47 +1,49 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <!--
-        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
-        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
-    -->
-    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
 
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Eden</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!--for the google charts-->
+    <script src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="scripts/gauges.js"></script>
+    <script src="controllers/edenCtl.js"></script>
+
+    <!-- <script type="text/javascript" src="controls/gauge1.js"></script> -->
     <!-- Load c3.css -->
-    <link href="/c3/c3.css" rel="stylesheet">
-
+    <!-- <link href="c3/c3.css" rel="stylesheet"> -->
     <!-- Load d3.js and c3.js -->
-    <script src="https://d3js.org/d3.v5.js"></script>
-    <script src="/c3/c3.min.js"></script>
+    <!-- <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="c3/c3.min.js"></script> -->
 
-    <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-messages.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-    <title>Eden</title>
+
+
+
 </head>
-<body ng-app="eden" ng-controller="edenCtl">
+<body ng-app="eden" ng-controller="edenCtl" style="background-color: black; height: 100%;">
     <md-toolbar class="dimGrey">
-        <div class="md-toolbar-tools dimGrey">
-            <md-button class="btn1" ng-click="showConfigMenu('true')">
-                Config
+        <div class="md-toolbar-tools dimGrey" style="height:80px">
+            <md-button class="btn1" ng-click="showMenu('true')">
+                Menu
                 <md-icon md-svg-icon="images/gear.svg"></md-icon>
             </md-button>
 
-            <h1 flex md-truncate>Eden</h1>
-            <md-button class="btn2" ng-click="signOut()">
-                Sign Out
+            <h2 flex md-truncate>EdenGreen v0.1</h2>
+            <md-button class="btn1" ng-click="refreshCharts()">
+                Refresh
             </md-button>
         </div>
     </md-toolbar>
@@ -49,97 +51,30 @@
     <section layout="row" flex md-theme="customTheme">
 
         <md-sidenav class="md-sidenav-left"
-                    md-is-locked-open="configMenu"
+                    md-is-locked-open="menuVisible"
                     md-disable-backdrop md-whiteframe="4">
 
             <md-toolbar class="md-primary">
                 <div class="md-toolbar-tools">
-                    <h1 class="md-flex">Config Menu</h1>
+                    <h1 class="md-flex">Menu</h1>
                 </div>
             </md-toolbar>
 
             <md-content layout="column">
                 <p>
-                    <input type="button" value="Do This" ng-click="" class="btn2" />
-                    <input type="button" value="Do That" ng-click="" class="btn2" />
-                    <input type="button" value="Nice Shoes" ng-click="" class="btn2" />
-                    <input type="button" value="Nice Hat" ng-click="" class="btn2" />
+                    <input type="button" value="Config" ng-click="show('config')" class="btn2" />
+                    <input type="button" value="Dashboard" ng-click="show('dashboard')" class="btn2" />
                 </p>
 
-
-                <md-button ng-click="showConfigMenu(false)" class="btn2">
-                    Close Config Menu
+                <md-button ng-click="showMenu(false)" class="btn2">
+                    Close Menu
                 </md-button>
             </md-content>
 
         </md-sidenav>
-
     </section>
 
-    <div ng-controller="edenCtl" ng-cloak="" ng-app="edenApp" style="width: 100%; height: 100%">
-        <md-grid-list md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="4"
-                      md-row-height-gt-md="1:1" md-row-height="1:1"
-                      md-gutter="12px" md-gutter-gt-sm="8px">
+    <div style="background-color:black" ng-if="template" ng-include="template + '.html'" flex></div>
 
-            <md-grid-tile class="green" md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
-                <div id="channel0"></div>
-
-            </md-grid-tile>
-
-            <md-grid-tile class="green" md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
-                <div id="channel1"></div>
-
-            </md-grid-tile>
-
-            <md-grid-tile class="green" md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
-                <div id="channel2"></div>
-
-            </md-grid-tile>
-
-            <md-grid-tile class="green" md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
-                <div id="channel3"></div>
-
-            </md-grid-tile>
-
-            <md-grid-tile md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
-                <div id="tempChart"></div>
-
-            </md-grid-tile>
-
-        </md-grid-list>
-    </div>
-
-    <!--<div class="app">
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
-        </div>
-    </div>-->
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="scripts/platformOverrides.js"></script>
-    <script type="text/javascript" src="scripts/index.js"></script>
-    <script type="text/javascript" src="scripts/gauges.js"></script>
-    <script>
-        angular.module('eden', ['ngMaterial']).controller('edenCtl', function ($scope) {
-            $scope.configMenu = true;
-
-            $scope.showConfigMenu = (show) => {
-                $scope.configMenu = show;
-            };
-
-            moistGauge('#channel0', 0, 'Basil 0');
-            moistGauge('#channel1', 1, 'Basil 1');
-            moistGauge('#channel2', 2, 'Basil 2');
-            moistGauge('#channel3', 3, 'Basil 3');
-
-            tempGauge('#tempChart');
-
-        }).config(function ($mdThemingProvider) {
-            $mdThemingProvider.theme('customTheme')
-                .primaryPalette('grey')
-                .accentPalette('orange')
-                .warnPalette('red');
-        });
-    </script>
 </body>
 </html>

@@ -15,7 +15,6 @@
 
     $scope.show = (template) => {
         if (template) {
-            //pouchdb.find(type, $scope);
             $scope.template = template;
             $scope.menuVisible = false;
         }
@@ -26,23 +25,18 @@
     };
 
     $scope.refreshCharts = () => {
-        google.charts.load("current", { packages: ['corechart', 'bar', 'line', 'gauge'] });
-        google.charts.setOnLoadCallback(refresh);
 
-        function refresh() {
+        var promise = $.getJSON("https://edengreen.ddns.net/moisture");
+        promise.done(function (reading) {
 
-            var promise = $.getJSON("https://edengreen.ddns.net/moisture");
-            promise.done(function (reading) {
+            moistGauge('#channel0', reading.channel0, 'Basil 0');
+            moistGauge('#channel1', reading.channel1, 'Habanero');
+            moistGauge('#channel2', reading.channel2, 'Basil 2');
+            moistGauge('#channel3', reading.channel3, 'Basil 3');
 
-                drawGauge('channel0', 'channel0', reading.channel0);
-                drawGauge('channel1', 'channel1', reading.channel1);
-                drawGauge('channel2', 'channel2', reading.channel2);
-                drawGauge('channel3', 'channel3', reading.channel3);
-
-            }).fail(function (err) {
-                // send error to api
-            });
-        }
+        }).fail(function (err) {
+            // send error to api
+        });
     };
 
     if ($scope.template == 'dashboard') {
